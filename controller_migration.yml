@@ -1,5 +1,5 @@
 ---
-- name: Export Ansible Controller 1 & Import into Ansible Controller 2
+- name: Export Controller 1 & Import into Controller 2
   hosts: localhost
   connection: local 
   gather_facts: False
@@ -7,17 +7,17 @@
   tasks:
   
     - name: Export all assets
-      register: controller_inventory
+      register: controller_config
       ansible.controller.export:
-        inventory: ['all']
+        all: True
         controller_host: "{{controller_host1}}"
-        controller_username: "{{controller_username1}}"
-        controller_password: "{{controller_password1}}"
+        controller_oauthtoken: "{{controller_token1}}"
         validate_certs: False
-        
+      
+
     - name: Import Controller Projects
       ansible.controller.import:
-        assets: "{{ controller_inventory.assets }}"
+        assets: "{{ controller_config.assets }}"
         controller_host: "{{controller_host2}}"
         controller_oauthtoken: "{{controller_token2}}"
         validate_certs: False
